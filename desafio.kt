@@ -6,13 +6,30 @@ data class Usuario(val nome: String)
 
 data class ConteudoEducacional(val nome: String, val nivel: Nivel, val duracao: Int = 1)
 
-data class Modulo(val nome: String, val cursos: List<ConteudoEducacional>)
+data class Modulo(val nome: String, val cursos: List<ConteudoEducacional>) {
+    override fun toString(): String {
+        return "Modulo(\n" +
+                "\tnome=$nome,\n" +
+                "\tcursos=${cursos.joinToString(prefix = "[\n\t", postfix = "\n\t]", separator = "\n\t")}," +
+                "\n)"
+    }
+}
 
 data class Formacao(val nome: String, val nivel: Nivel, val duracao: Int, val conteudos: List<Modulo>) {
     val inscritos = mutableListOf<Usuario>()
     
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun matricular(vararg usuarios: Usuario) {
+        inscritos.addAll(usuarios)
+    }
+
+    override fun toString(): String {
+        return "Formacao(\n" +
+                "\tnome=$nome,\n" +
+                "\tnivel=$nivel,\n" +
+                "\tduracao=$duracao,\n" +
+                "\tconteudos=${conteudos.joinToString(prefix = "[\n\t", postfix = "\n\t]", separator = "\n\t")},\n" +
+                "\tinscritos=${inscritos.joinToString(prefix = "[\n\t", postfix = "\n\t]", separator = "\n\t")}," +
+                "\n)"
     }
 }
 
@@ -35,9 +52,8 @@ fun main() {
         conteudos = listOf(modulo)
     )
 
-    formacao.matricular(Usuario("AlunoA"))
-    formacao.matricular(Usuario("AlunoB"))
-    formacao.matricular(Usuario("AlunoC"))
+    formacao.matricular(Usuario("AlunoA"), Usuario("AlunoB"), Usuario("AlunoC"))
+    formacao.matricular(Usuario("AlunoD"))
 
     println(formacao)
 }
